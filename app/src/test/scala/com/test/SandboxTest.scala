@@ -2,7 +2,6 @@ package com.test
 
 import akka.actor.testkit.typed.scaladsl.{ActorTestKit, ScalaTestWithActorTestKit}
 import akka.actor.typed.ActorRef
-import akka.actor.typed.scaladsl.Behaviors
 import com.test.Sandbox.FooCommand
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -12,7 +11,9 @@ class SandboxTest extends ScalaTestWithActorTestKit(ActorTestKit()) with AnyWord
   "App" should {
     "work" in {
 
-      val ref: ActorRef[Sandbox.Command] = spawn(Sandbox(), "worker")
+      val dispatcher: Dispatcher = new Dispatcher("fooAttr", "barAttr", "buzAttr")
+
+      val ref: ActorRef[Sandbox.Command] = spawn(Sandbox(dispatcher), "worker")
 
       ref ! FooCommand("foo", "Hello")
 
