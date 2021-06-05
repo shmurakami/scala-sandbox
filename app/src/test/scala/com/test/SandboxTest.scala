@@ -21,32 +21,58 @@ class SandboxTest extends ScalaTestWithActorTestKit(ActorTestKit()) with AnyWord
     }
 
     "sample" in {
-      sealed trait Co
-      case class Co1() extends Co
-      case class Co2() extends Co
+      trait P
+
+      trait R extends P
+      case class R1() extends R
+      case class R2() extends R
+
+      trait V
 
       class C[T]
-      val c1: C[Co] = new C[Co]
 
-      class C2[+T]
-      val c2: C2[Co] = new C2[Co1]
+      val c: C[R] = new C[R]
+//      val c1: C[R] = new C[C1] // NG
 
-      class C3[-T]
-      val c3: C3[Co2] = new C3[Co]
+      class CA[+T]
+      val ca0: CA[R] = new CA[R]
+      val ca1: CA[R] = new CA[R1] // OK
+      val ca2: CA[R] = new CA[R2] // OK
 
-      trait T4[T]
-      class Dispatcher extends T4[Co] {
-        def d(t: Co): Unit = ()
-      }
-      val dispatcher = new Dispatcher
-      dispatcher.d(Co1())
+      class CB[-T]
+      val cb0: CB[R] = new CB[R]
+//      val cb1: CB[R] = new CB[R1] // NG
+      val cb2: CB[R1] = new CB[R] // OK
 
-      trait T5[T]
-      class Dispatcher5 extends T5[Co] {
-        def d(t: Co): Unit = ()
-      }
-      val dispatcher5 = new Dispatcher5
-      dispatcher5.d(Co2())
+      class CC[T <: R]
+      val cc0: CC[R] = new CC[R]
+//      val cc1: CC[R] = new CC[R1] // NG
+//      val cc2: CC[R1] = new CC[R] // NG
+//      val cc3: CC[R] = new CC[V] // NG
+
+      class CD[+T <: R]
+      val cd0: CD[R] = new CD[R]
+      val cd1: CD[R] = new CD[R1]
+      val cd2: CD[R] = new CD[R2]
+//      val cd3: CD[R] = new CD[V] // NG
+//      val cd4: CD[R] = new CD[P] // NG
+
+      class CE[-T <: R]
+      val ce0: CE[R] = new CE[R]
+//      val ce1: CE[R] = new CE[P] NG IDE is OK but not comfortable T <: R
+//      val ce2: CE[R] = new CE[R1] // NG
+      val ce3: CE[R1] = new CE[R]
+//      val ce4: CE[R1] = new CE[P] NG IDE is OK but not comfortable T <: R
+
+      class CF[-T >: R]
+      val cf0: CF[R] = new CF[R]
+//      val cf1: CF[R] = new CF[P] // NG
+      val cf2: CF[R] = new CF[P]
+
+      class CG[+T >: R]
+      val cg0: CG[R] = new CG[R]
+      val cg1: CG[P] = new CG[R]
+//      val cg2: CG[R1] = new CG[R1] NG
 
       true shouldBe true
 
