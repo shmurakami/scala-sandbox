@@ -15,7 +15,7 @@ val app = (project in file("app"))
 
 val root = (project in file("."))
   .settings(
-    name := "learning-airframe",
+    name := "scala-sandbox",
     scalaVersion := myScalaVersion
   )
   .aggregate(

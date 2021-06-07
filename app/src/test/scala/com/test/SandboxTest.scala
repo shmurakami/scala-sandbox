@@ -38,6 +38,7 @@ class SandboxTest extends ScalaTestWithActorTestKit(ActorTestKit()) with AnyWord
       val ca0: CA[R] = new CA[R]
       val ca1: CA[R] = new CA[R1] // OK
       val ca2: CA[R] = new CA[R2] // OK
+//      val ca3: CA[R] = new CA[P]
 
       class CB[-T]
       val cb0: CB[R] = new CB[R]
