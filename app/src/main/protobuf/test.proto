@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+//option java_package = 'com.example';
+
+message MyRequest {
+  message Data {
+    int32 id = 1;
+  }
+
+  Data data = 1;
+  string key = 2;
+}
+
+message MyResponse {
+  bool success = 1;
+}
+
+service Server {
+  rpc hello(MyRequest) returns(MyResponse);
+}
+
