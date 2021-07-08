@@ -27,11 +27,23 @@ val app = (project in file("app"))
     )
   )
 
+val fp = (project in file("fp"))
+  .settings(
+    scalaVersion := myScalaVersion,
+    name := "fp",
+    libraryDependencies ++= Seq(
+      "org.scalactic" %% "scalactic" % "3.2.9",
+      "org.scalatest" %% "scalatest" % "3.2.9" % "test"
+    )
+  )
+
+
 val root = (project in file("."))
   .settings(
     name := "scala-sandbox",
     scalaVersion := myScalaVersion
   )
   .aggregate(
-    app
+    app,
+    fp
   )
